@@ -1,4 +1,6 @@
 <?php
+include("config.php");
+
 class MyDb {
     // The database connection
     protected static $connection;
@@ -8,10 +10,12 @@ class MyDb {
      * 
      * @return bool false on failure / mysqli MySQLi object instance on success
      */
-    public function connect() {    
+    public function connect() {
+		global $dbhost,$dbuser,$dbpass,$dbdb;
+   
         // Try and connect to the database
         if(!isset(self::$connection)) {
-              self::$connection = new mysqli('192.168.0.91','autorx','f6vrpyqwjxaogW7J','autorx');
+              self::$connection = new mysqli($dbhost,$dbuser,$dbpass,$dbdb);
         }
 
         // If connection was not successful, handle the error
@@ -86,18 +90,6 @@ class MyDb {
         while ($row = $result -> fetch_row()) {
             $rows[] = $row;
         }
-        return $rows;
-    }
-
- 	public function getlastSonde() {
-	    $q = "SELECT * FROM `sondedata` ORDER BY `last_date` DESC LIMIT 1";
-		
-        $rows = array();
-        $result = $this -> query($q);
-        if($result === false) {
-            return false;
-        }
-		$rows = $result -> fetch_row();
         return $rows;
     }
 	
